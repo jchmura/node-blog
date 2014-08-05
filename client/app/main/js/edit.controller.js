@@ -11,7 +11,7 @@ blogApp.controller('EditCtrl', function ($scope, $http, $state, $sce, $statePara
     $timeout(function() {
         initialized = true;
     }, 500);
-    
+
     if (!$stateParams.images) {
         $scope.images = [];
     } else {
@@ -102,7 +102,7 @@ blogApp.controller('EditCtrl', function ($scope, $http, $state, $sce, $statePara
         }
     };
 
-    $('#send').text('Edytuj wpis')
+    $('#send').text('Edytuj wpis');
 });
 
 blogApp.config(function(uiSelectConfig) {

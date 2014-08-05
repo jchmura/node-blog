@@ -45,7 +45,7 @@ blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, 
         $state.go('detail', {
             id: story._id,
             user: $scope.user
-        })
+        });
     };
 
     var saveToken = function(token) {
@@ -86,7 +86,7 @@ blogApp.filter('nlToArray', function() {
         } else {
             return '';
         }
-    }
+    };
 });
 
 blogApp.filter('media', function() {
@@ -95,14 +95,14 @@ blogApp.filter('media', function() {
         video: '/assets/videos/'
     };
     var createLink = function(url, text) {
-        return '<a href="' + url + '" target="_self">' + text + '</a>'
+        return '<a href="' + url + '" target="_self">' + text + '</a>';
     };
     return function(paragraph, story) {
-        return paragraph.replace(/{(image|video)(\d+)}/g, function(match, type, number, offset, string) {
+        return paragraph.replace(/{(image|video)(\d+)}/g, function(match, type, number) {
             var url = mediaPath[type] + story.media[type + 's'][parseInt(number)-1];
             return createLink(url, type);
         });
-    }
+    };
 });
 
 blogApp.filter('parseUrl', function () {

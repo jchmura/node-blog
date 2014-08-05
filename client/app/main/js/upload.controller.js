@@ -8,11 +8,11 @@ blogApp.controller('UploadCtrl', function ($scope, socket, $state, $stateParams)
     $scope.uploading = false;
 
     $scope.removeImage = function(image) {
-        $scope.images = _.without($scope.images, image)
+        $scope.images = _.without($scope.images, image);
     };
 
     $scope.removeVideo = function(image) {
-        $scope.videos = _.without($scope.videos, image)
+        $scope.videos = _.without($scope.videos, image);
     };
 
     $scope.send = function() {
@@ -57,7 +57,7 @@ blogApp.controller('UploadCtrl', function ($scope, socket, $state, $stateParams)
         });
     });
 
-    socket.socket.on('done', function(data) {
+    socket.socket.on('done', function() {
         uploadingFile.progress = uploadingFile.size;
         nextFile(uploadingFile);
     });
@@ -86,18 +86,18 @@ blogApp.controller('UploadCtrl', function ($scope, socket, $state, $stateParams)
         $scope.uploading = false;
     };
 
-    $("#photos:file").filestyle({input: false, buttonText: "Dodaj zdjęcia"});
-    $("#videos:file").filestyle({input: false, buttonText: "Dodaj filmiki"});
+    $('#photos:file').filestyle({input: false, buttonText: 'Dodaj zdjęcia'});
+    $('#videos:file').filestyle({input: false, buttonText: 'Dodaj filmiki'});
 });
 
 
-blogApp.directive("fileread", [function () {
+blogApp.directive('fileread', [function () {
     return {
         scope: {
-            fileread: "="
+            fileread: '='
         },
-        link: function (scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
+        link: function (scope, element) {
+            element.bind('change', function (changeEvent) {
                 scope.$apply(function () {
                     scope.fileread = [];
                     var files = changeEvent.target.files;
@@ -108,5 +108,5 @@ blogApp.directive("fileread", [function () {
                 });
             });
         }
-    }
+    };
 }]);

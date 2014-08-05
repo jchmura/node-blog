@@ -12,8 +12,7 @@ blogApp.controller('DetailCtrl', function ($scope, $http, $sce, $cookies, $state
 
     $http.get('/api/stories/' + $scope.id + '?token=' + $cookies.token).success(function(response) {
         $scope.story = response;
-        socket.syncUpdates('story_comments', $scope.story.comments, function(event, item, array) {
-        });
+        socket.syncUpdates('story_comments', $scope.story.comments, function() {});
     });
 
     $scope.trustVideo = function(videoUrl) {
@@ -45,13 +44,13 @@ blogApp.filter('todayDate', function(dateFilter) {
             var now = new Date();
             var date = new Date(input);
 
-            if (now.getDate() == date.getDate() && now.getMonth() == date.getMonth() && now.getFullYear() == date.getFullYear()) {
+            if (now.getDate() === date.getDate() && now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
                 return dateFilter(input, 'mediumTime');
             } else {
                 return dateFilter(input, 'medium');
             }
         }
-    }
+    };
 });
 
 blogApp.filter('images', function() {
@@ -59,5 +58,5 @@ blogApp.filter('images', function() {
     return function(input) {
         input = input.replace(imageUrl, '<a href="$1"><img src="$1"></a>');
         return input;
-    }
+    };
 });

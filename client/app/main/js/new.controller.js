@@ -74,11 +74,11 @@ blogApp.controller('NewCtrl', function ($scope, $http, $state, $stateParams, $sc
                 videos: $scope.videos
             }
         };
-        $http.post('/api/stories', data).success(function(response) {
+        $http.post('/api/stories', data).success(function() {
             $state.go('main');
         });
     };
-    
+
     $scope.uploadFiles = function() {
         $state.go('upload', {
             source: 'new',
@@ -95,7 +95,7 @@ blogApp.controller('NewCtrl', function ($scope, $http, $state, $stateParams, $sc
         } else {
             return '';
         }
-    }
+    };
 });
 
 blogApp.config(function(uiSelectConfig) {
