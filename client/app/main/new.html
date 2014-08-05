@@ -1,0 +1,72 @@
+<div class="container">
+
+    <!-- Date -->
+    <div id="dateForm" class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="date">Data</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="date" datepicker-popup="dd.MM.yyyy" ng-model="date"
+                           is-open="opened" ng-required="true" current-text="Dzisiaj" clear-text="Wyczyść"
+                           close-text="Zamknij" datepicker-options="dateOptions"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+
+            <!-- Content -->
+            <div class="form-group">
+                <label for="content">Treść</label>
+                <textarea id="content" class="form-control" ng-model="content"></textarea>
+                <p class="help-block">Można używać znaczników <code>{imageX}</code> oraz <code>{videoX}</code> (gdzie <code>X</code> to oczywiście liczba). Wpisz i zobacz co się stanie.</p>
+            </div>
+
+            <div class="row">
+
+                <!-- Images -->
+                <div class="col-sm-6">
+                    <div class="form-group" ng-show="images.length > 0">
+                        <label>Zdjęcia</label>
+                        <ui-select ng-repeat="image in images track by $index" ng-model="images[$index]">
+                            <ui-select-match placeholder="image{{ $index+1 }}">{{ $select.selected }}</ui-select-match>
+                            <ui-select-choices repeat="item in media.images">
+                                <div ng-bind-html="trustAsHtml((item | highlight: $select.search))"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <!-- Videos -->
+                <div class="col-sm-6">
+                    <div class="form-group" ng-show="videos.length > 0">
+                        <label>Filmiki</label>
+                        <ui-select ng-repeat="video in videos track by $index" ng-model="videos[$index]">
+                            <ui-select-match placeholder="video{{ $index+1 }}">{{ $select.selected }}</ui-select-match>
+                            <ui-select-choices repeat="item in media.videos">
+                                <div ng-bind-html="trustAsHtml((item | highlight: $select.search))"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <button class="btn btn-primary" ng-click="uploadFiles()">
+                    <span class="glyphicon glyphicon-cloud-upload"></span> Wyślij nowe zdjęcia i filmiki na serwer
+                </button>
+            </div>
+
+            <div>
+                <button type="submit" id="send" class="btn btn-default" ng-click="send()">Utwórz wpis</button>
+            </div>
+        </div>
+    </div>
+</div>
+

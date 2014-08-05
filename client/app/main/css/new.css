@@ -1,0 +1,20 @@
+#dateForm {
+    margin-top: 20px;
+}
+
+textarea {
+    max-width: 100%;
+}
+
+#content {
+    height: 200px;
+}
+
+.ui-select-bootstrap.dropdown {
+    margin-top: 5px;
+}
+
+#send {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

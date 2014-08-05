@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="story">
+                <h2>{{ story.date | date : 'fullDate'}} <span class="glyphicon glyphicon-pencil" ng-click="edit(story)" ng-show="user === 'admin'"></span></h2>
+                <p class="text-justify" ng-repeat="paragraph in story.content | nlToArray track by $index" ng-bind-html="paragraph | parseUrl | media:story"></p>
+
+                <hr/>
+
+                <div ng-repeat="comment in story.comments" class="comment panel panel-default">
+                    <div class="comment-author panel-heading">
+                        {{ comment.author }} <span class="comment-date">{{ comment.date | todayDate }}</span>
+                    </div>
+                    <div class="comment-content panel-body">
+                        <p ng-repeat="paragraph in comment.content | nlToArray track by $index" ng-bind-html="paragraph | images | parseUrl"></p>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="comment-author panel-heading" ng-class="{'has-error': new.author.length === 0}">
+                        <input type="text" class="form-control" placeholder="Autor" ng-model="new.author">
+                    </div>
+                    <div class="comment-content panel-body" ng-class="{'has-error': new.content.length === 0}">
+                        <textarea class="form-control" rows="2" placeholder="Komentarz" ng-model="new.content"></textarea>
+                    </div>
+                </div>
+                <button type="button" id="btn-send" class="btn btn-default pull-right" ng-click="send()" ng-disabled="!new.author || !new.content.length">Wyślij</button>
+            </div>
+        </div>
+    </div>
+</div>

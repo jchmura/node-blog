@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 upload-forms">
+            <div class="form-group">
+                <label for="photos">Zdjęcia</label>
+                <input type="file" id="photos" class="filestyle" fileread="images" multiple>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="image in images">{{ image.name }}
+                    <span class="pull-right glyphicon glyphicon-remove" ng-click="removeImage(image)"></span>
+                    <progressbar value="image.progress" max="image.size">{{ image.progress / image.size * 100 | number:1 }}%</progressbar>
+                </li>
+            </ul>
+
+            <div class="form-group">
+                <label for="photos">Filmiki</label>
+                <input type="file" id="videos" class="filestyle" fileread="videos" multiple>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="video in videos">{{ video.name }}
+                    <span class="pull-right glyphicon glyphicon-remove" ng-click="removeVideo(video)"></span>
+                    <progressbar value="video.progress" max="video.size">{{ video.progress / video.size * 100 | number:1 }}%</progressbar>
+                </li>
+            </ul>
+
+            <button type="button" id="back" class="btn btn-danger" ng-disabled="uploading" ng-click="back()">Cofnij</button>
+            <button type="submit" id="send" class="btn btn-success" ng-disabled="images.length == 0 && videos.length == 0" ng-click="send()">Wyślij pliki</button>
+        </div>
+    </div>
+</div>
+
