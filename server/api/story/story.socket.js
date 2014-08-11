@@ -31,7 +31,7 @@ function preSave (socketio, doc) {
     var id = doc._id;
     Story.findById(id, function (err, story) {
         if (err) { return; }
-        var comments = story.comments;
+        var comments = story? story.comments: [];
         commentsLength[id] = comments? comments.length: 0;
     });
 }
