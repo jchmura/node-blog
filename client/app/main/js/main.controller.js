@@ -2,9 +2,9 @@
 
 var blogApp = angular.module('blogApp');
 
-blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, socket) {
+blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, socket, Story, User) {
     $scope.stories = [];
-    $scope.user = '';
+    $scope.user = User.getUser();
     $scope.alertText = '';
     $scope.imagePath = '/assets/images/';
     $scope.videoPath = '/assets/videos/';
@@ -13,13 +13,18 @@ blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, 
         $http.get('/api/stories?token=' + $scope.token).success(function(response) {
             hideLogin();
             $scope.stories = response.stories;
-            $scope.user = response.user;
-            socket.syncUpdates('story', $scope.stories, function() {
-            });
+            var user = {
+                name: response.user,
+                type: response.user
+            };
+            $scope.user = user;
+            User.setUser(user);
+            socket.syncUpdates('story', $scope.stories, function() {});
             saveToken($scope.token);
         }).error(function(data) {
             showAlert(data);
             delete $cookies.token;
+            User.resetUser();
         });
     };
 
@@ -31,22 +36,27 @@ blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, 
         return $scope.videoPath + videoUrl;
     };
 
+    $scope.newStory = function() {
+        Story.resetStory();
+        $state.go('new');
+    };
+
     $scope.edit = function(story) {
+        Story.setStory(story);
         $state.go('edit', {
-            id: story._id,
-            date: story.date,
-            content: story.content,
-            images: story.media.images,
-            videos: story.media.videos
+            id: story._id
         });
     };
 
     $scope.detail = function(story) {
+        Story.setStory(story);
+        User.setUser($scope.user);
         $state.go('detail', {
-            id: story._id,
-            user: $scope.user
+            id: story._id
         });
     };
+
+    $scope.isAdmin = User.isAdmin;
 
     var saveToken = function(token) {
         $cookies.token = token;
@@ -77,58 +87,4 @@ blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, 
     } else {
         showLogin();
     }
-});
-
-blogApp.filter('nlToArray', function() {
-    return function (text) {
-        if (text) {
-            return text.split('\n');
-        } else {
-            return '';
-        }
-    };
-});
-
-blogApp.filter('media', function() {
-    var mediaPath = {
-        image: '/assets/images/',
-        video: '/assets/videos/'
-    };
-    var createLink = function(url, text) {
-        return '<a href="' + url + '" target="_self">' + text + '</a>';
-    };
-    return function(paragraph, story) {
-        return paragraph.replace(/{(image|video)(\d+)}/g, function(match, type, number) {
-            var url = mediaPath[type] + story.media[type + 's'][parseInt(number)-1];
-            return createLink(url, type);
-        });
-    };
-});
-
-blogApp.filter('parseUrl', function () {
-    var replacements = [
-        {
-            //URLs starting with http://, https://, or ftp://
-            search: /^(?!(href="|src="))((https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim,
-            replace: '<a href="$2">$2</a>'
-        },
-        {
-            //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
-            search: /^(?!(href="|src="))(^|[^\/])(www\.[\S]+(\b|$))/gim,
-            replace: '$1<a href="http://$2">$2</a>'
-        },
-        {
-            //Change email addresses to mailto:: links.
-            search: /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim,
-            replace: '<a href="mailto:$1">$1</a>'
-        }
-    ];
-
-    return function (text) {
-        for (var i = 0; replacements.length > i; i++) {
-            text = text.replace(replacements[i].search, replacements[i].replace);
-        }
-
-        return text;
-    };
 });

@@ -25,6 +25,7 @@ var files = [];
 
 function onStart(socket, data) {
     var name = data.name;
+    console.log('Starting uploading file: ' + name);
     files[name] = {
         data: [],
         size: data.size,

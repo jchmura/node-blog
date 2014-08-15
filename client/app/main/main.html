@@ -16,14 +16,14 @@
                 </div>
             </div>
 
-            <div id="admin" class="text-center" ng-show="user === 'admin'">
-                <button type="button" class="btn btn-primary btn-lg" ui-sref="new">
+            <div id="admin" class="text-center" ng-show="isAdmin()">
+                <button type="button" class="btn btn-primary btn-lg" ng-click="newStory()">
                     <span class="glyphicon glyphicon-plus"></span> Dodaj nowy wpis
                 </button>
             </div>
 
             <div class="story" ng-repeat="story in stories">
-                <h2>{{ story.date | date : 'fullDate'}} <span class="glyphicon glyphicon-pencil" ng-click="edit(story)" ng-show="user === 'admin'"></span></h2>
+                <h2>{{ story.date | date : 'fullDate'}} <span class="glyphicon glyphicon-pencil" ng-click="edit(story)" ng-show="isAdmin()"></span></h2>
                 <p class="text-justify" ng-repeat="paragraph in story.content | nlToArray track by $index" ng-bind-html="paragraph | parseUrl | media:story"></p>
                 <a class="comments-link pull-right" ng-click="detail(story)">Komentarze: {{ story.comments.length }}</a>
             </div>

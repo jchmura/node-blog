@@ -2,46 +2,47 @@
 
 var blogApp = angular.module('blogApp');
 
-blogApp.controller('NewCtrl', function ($scope, $http, $state, $stateParams, $sce, $timeout) {
-    $scope.date = $stateParams.date || new Date();
-    $scope.content = $stateParams.content || '';
+blogApp.controller('NewCtrl', function ($scope, $http, $state, $sce, $timeout, Story) {
+    $scope.story = {};
+    Story.getStory().then(function(story) {
+        $scope.story = story;
+    }, function(err) {
+        console.error(err);
+    });
+
+    $scope.story.date = $scope.story.date || new Date();
     $scope.media = {};
     var initialized = false;
+
     $timeout(function() {
         initialized = true;
     }, 500);
 
-    if (!$stateParams.images) {
-        $scope.images = [];
-    } else {
-        $scope.images = $stateParams.images.split(',');
-    }
-
-    if (!$stateParams.videos) {
-        $scope.videos = [];
-    } else {
-        $scope.videos = $stateParams.videos.split(',');
-    }
-
     $scope.$watch(function() {
-        var matches = $scope.content.match(/{image\d+}/g) || [];
+        if (!$scope.story.content) {
+            return 0;
+        }
+        var matches = $scope.story.content.match(/{image\d+}/g) || [];
         return matches.length;
     }, function(newValue, oldValue) {
         if (newValue < oldValue) {
-            $scope.images.pop();
+            $scope.story.media.images.pop();
         } else if (newValue > 0 && initialized) {
-            $scope.images.push('image' + newValue);
+            $scope.story.media.images.push('image' + newValue);
         }
     });
 
     $scope.$watch(function() {
-        var matches = $scope.content.match(/{video\d+}/g) || [];
+        if (!$scope.story.content) {
+            return 0;
+        }
+        var matches = $scope.story.content.match(/{video\d+}/g) || [];
         return matches.length;
     }, function(newValue, oldValue) {
         if (newValue < oldValue) {
-            $scope.videos.pop();
+            $scope.story.media.videos.pop();
         } else if (newValue > 0 && initialized) {
-            $scope.videos.push('video' + newValue);
+            $scope.story.media.videos.push('video' + newValue);
         }
     });
 
@@ -50,7 +51,7 @@ blogApp.controller('NewCtrl', function ($scope, $http, $state, $stateParams, $sc
     });
 
     $scope.today = function() {
-        $scope.date = new Date();
+        $scope.story.date = new Date();
     };
 
     $scope.open = function($event) {
@@ -66,27 +67,16 @@ blogApp.controller('NewCtrl', function ($scope, $http, $state, $stateParams, $sc
     };
 
     $scope.send = function() {
-        var data = {
-            date: $scope.date,
-            content: $scope.content,
-            media: {
-                images: $scope.images,
-                videos: $scope.videos
-            }
-        };
-        $http.post('/api/stories', data).success(function() {
+        delete $scope.story._id;
+        $http.post('/api/stories', $scope.story).success(function() {
+            Story.resetStory();
             $state.go('main');
         });
     };
 
     $scope.uploadFiles = function() {
-        $state.go('upload', {
-            source: 'new',
-            date: $scope.date,
-            content: $scope.content,
-            images: $scope.images,
-            videos: $scope.videos
-        });
+        Story.setStory($scope.story);
+        $state.go('upload');
     };
 
     $scope.trustAsHtml = function(value) {

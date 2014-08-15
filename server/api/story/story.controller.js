@@ -58,7 +58,7 @@ exports.create = function(req, res) {
 
 // Updates an existing story in the DB.
 exports.update = function(req, res) {
-    if(req.body._id) { delete req.body._id; }
+    stripBody(req.body);
     Story.findById(req.params.id, function (err, story) {
         if (err) { return handleError(res, err); }
         if(!story) { return res.send(404); }
@@ -100,4 +100,13 @@ exports.comment = function(req, res) {
 function handleError(res, err) {
     console.log(err);
     return res.send(500, err);
+}
+
+function stripBody(body) {
+    var toStrip = ['_id', 'comments'];
+    _.forEach(toStrip, function(property) {
+        if (body[property]) {
+            delete body[property];
+        }
+    });
 }

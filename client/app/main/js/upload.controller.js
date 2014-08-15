@@ -2,7 +2,7 @@
 
 var blogApp = angular.module('blogApp');
 
-blogApp.controller('UploadCtrl', function ($scope, socket, $state, $stateParams) {
+blogApp.controller('UploadCtrl', function ($scope, socket) {
     $scope.images = [];
     $scope.videos = [];
     $scope.uploading = false;
@@ -24,16 +24,6 @@ blogApp.controller('UploadCtrl', function ($scope, socket, $state, $stateParams)
         } else {
             doneUploading();
         }
-    };
-
-    $scope.back = function() {
-        $state.go($stateParams.source, {
-            id: $stateParams.id,
-            date: $stateParams.date,
-            content: $stateParams.content,
-            images: $stateParams.images,
-            videos: $stateParams.videos
-        });
     };
 
     var uploadingFile;
