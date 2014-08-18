@@ -8,6 +8,7 @@
 
 var _ = require('lodash');
 var Story = require('./story.model');
+var logger = require('log4js').getLogger('storyController');
 
 // Get list of stories
 exports.index = function(req, res) {
@@ -98,7 +99,7 @@ exports.comment = function(req, res) {
 };
 
 function handleError(res, err) {
-    console.log(err);
+    logger.warn(err);
     return res.send(500, err);
 }
 

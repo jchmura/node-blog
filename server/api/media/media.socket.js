@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var app = require('../../app');
+var logger = require('log4js').getLogger('mediaSocket');
 
 exports.client = function(socket) {
     socket.on('start', function(data) {
@@ -25,7 +26,7 @@ var files = [];
 
 function onStart(socket, data) {
     var name = data.name;
-    console.log('Starting uploading file: ' + name);
+    logger.info('Starting uploading file: ' + name);
     files[name] = {
         data: [],
         size: data.size,
@@ -33,7 +34,7 @@ function onStart(socket, data) {
     };
     fs.open(getType(data.type) + name, 'a', function (err, fd) {
         if (err) {
-            console.log(err);
+            logger.error(err);
         } else {
             files[name].handler = fd;
             socket.emit('moreData', {
@@ -52,7 +53,7 @@ function onUpload(socket, data) {
         var buff = Buffer.concat(file.data);
         fs.write(file.handler, buff, 0, buff.length, null, function(err) {
             if (err) {
-                console.log(err);
+                logger.error(err);
             } else {
                 socket.emit('done');
                 fs.close(file.handler);
@@ -70,7 +71,7 @@ function onUpload(socket, data) {
 function getType(type) {
     var found = type.replace(/.*(image|video).*/, '$1');
     if (found) {
-        console.log(found);
+        logger.debug('Media type: ' + found);
         return app.get('appPath') + '/assets/' + found + 's/';
     }
 }
