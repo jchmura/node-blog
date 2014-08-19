@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="story">
-                <h2>{{ story.date | date : 'fullDate'}} <span class="glyphicon glyphicon-pencil" ng-click="edit(story)" ng-show="isAdmin()"></span></h2>
+                <h2>{{ story.date | date : 'fullDate'}} <story-admin story="story"></story-admin></h2>
                 <p class="text-justify" ng-repeat="paragraph in story.content | nlToArray track by $index" ng-bind-html="paragraph | linky | media:story"></p>
 
                 <hr/>
 
                 <div ng-repeat="comment in story.comments" class="comment panel panel-default">
                     <div class="comment-author panel-heading">
-                        {{ comment.author }} <span class="comment-date">{{ comment.date | todayDate }}</span>
+                        {{ comment.author }} <span class="comment-date">{{ comment.date | todayDate }}</span> <comment-admin story="story" comment="comment"></comment-admin>
                     </div>
                     <div class="comment-content panel-body">
                         <p ng-repeat="paragraph in comment.content | nlToArray track by $index" ng-bind-html="paragraph | images | parseUrl"></p>

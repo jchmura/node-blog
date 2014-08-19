@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h3 class="modal-title">Usuwanie komentarza</h3>
+</div>
+<div class="modal-body">
+    <p>Czy na pewno chcesz usunąć komentarz z dnia {{ comment.date | date : 'medium' }}?</p>
+
+    <blockquote>
+        <p>{{ comment.content }}</p>
+    </blockquote>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" ng-click="cancel()">NIE</button>
+    <button class="btn btn-success" ng-click="ok()">TAK</button>
+</div>

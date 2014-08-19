@@ -75,7 +75,6 @@ blogApp.factory('PreviousState', function($rootScope) {
     $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
         previousState = from;
         previousParams = fromParams;
-        console.log(previousState);
     });
 
     return {

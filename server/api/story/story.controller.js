@@ -72,7 +72,7 @@ exports.update = function(req, res) {
 };
 
 // Deletes a story from the DB.
-/*exports.destroy = function(req, res) {
+exports.destroy = function(req, res) {
     Story.findById(req.params.id, function (err, story) {
         if(err) { return handleError(res, err); }
         if(!story) { return res.send(404); }
@@ -81,7 +81,7 @@ exports.update = function(req, res) {
             return res.send(204);
         });
     });
-};*/
+};
 
 exports.comment = function(req, res) {
     Story.findById(req.params.id, function(err, story) {
@@ -94,6 +94,20 @@ exports.comment = function(req, res) {
         story.save(function(err, story) {
             if (err) { return handleError(res, err); }
             return res.json(200, story);
+        });
+    })
+};
+
+exports.destroyComment = function(req, res) {
+    Story.findById(req.params.id, function(err, story) {
+        if (err) { return handleError(res, err); }
+        if (!story) { return res.send(404); }
+
+        story.comments.pull(req.params.comment);
+
+        story.save(function(err, story) {
+            if (err) { return handleError(res, err); }
+            return res.send(204);
         });
     })
 };

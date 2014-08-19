@@ -7,7 +7,7 @@ blogApp.controller('DetailCtrl', function ($scope, $http, $sce, $cookies, $state
     $scope.story = {};
     Story.getStory(id).then(function(story) {
         $scope.story = story;
-        socket.syncUpdates('story_comments', $scope.story.comments, function() {});
+        socket.syncUpdates('story_comments' + id, $scope.story.comments, function() {});
     }, function(err) {
         console.error(err);
     });

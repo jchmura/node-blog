@@ -23,7 +23,7 @@
             </div>
 
             <div class="story" ng-repeat="story in stories">
-                <h2>{{ story.date | date : 'fullDate'}} <span class="glyphicon glyphicon-pencil" ng-click="edit(story)" ng-show="isAdmin()"></span></h2>
+                <h2>{{ story.date | date : 'fullDate'}} <story-admin story="story"></story-admin></h2>
                 <p class="text-justify" ng-repeat="paragraph in story.content | nlToArray track by $index" ng-bind-html="paragraph | linky | media:story"></p>
                 <a class="comments-link pull-right" ng-click="detail(story)">Komentarze: {{ story.comments.length }}</a>
             </div>
