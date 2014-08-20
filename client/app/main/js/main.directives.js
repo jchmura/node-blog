@@ -8,7 +8,7 @@ blogApp.directive('storyAdmin', function(Story, User, $http, $state, $modal) {
         scope: {
             story: '='
         },
-        templateUrl: '/app/main/templates/story-admin.html',
+        templateUrl: 'app/main/templates/story-admin.html',
         controller: function($scope) {
             $scope.isAdmin = User.isAdmin;
             $scope.edit = function() {
@@ -22,7 +22,15 @@ blogApp.directive('storyAdmin', function(Story, User, $http, $state, $modal) {
                 var story = $scope.story;
                 var modal = $modal.open({
                     templateUrl: '/app/main/templates/delete-story-modal.html',
-                    controller: DeleteStoryModalCtrl,
+                    controller: function($scope, $modalInstance, story) {
+                        $scope.story = story;
+                        $scope.ok = function () {
+                            $modalInstance.close();
+                        };
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss();
+                        };
+                    },
                     resolve: {
                         story: function() {
                             return story;
@@ -43,13 +51,3 @@ blogApp.directive('storyAdmin', function(Story, User, $http, $state, $modal) {
         }
     };
 });
-
-function DeleteStoryModalCtrl($scope, $modalInstance, story) {
-    $scope.story = story;
-    $scope.ok = function () {
-        $modalInstance.close();
-    };
-    $scope.cancel = function () {
-        $modalInstance.dismiss();
-    };
-}

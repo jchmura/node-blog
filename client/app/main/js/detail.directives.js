@@ -9,15 +9,23 @@ blogApp.directive('commentAdmin', function(Story, User, $http, $state, $modal) {
             story: '=',
             comment: '='
         },
-        templateUrl: '/app/main/templates/comment-admin.html',
+        templateUrl: 'app/main/templates/comment-admin.html',
         controller: function($scope) {
             $scope.isAdmin = User.isAdmin;
             $scope.destroy = function() {
                 var story = $scope.story;
                 var comment = $scope.comment;
                 var modal = $modal.open({
-                    templateUrl: '/app/main/templates/delete-comment-modal.html',
-                    controller: DeleteCommentModalCtrl,
+                    templateUrl: 'app/main/templates/delete-comment-modal.html',
+                    controller: function($scope, $modalInstance, comment) {
+                        $scope.comment = comment;
+                        $scope.ok = function () {
+                            $modalInstance.close();
+                        };
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss();
+                        };
+                    },
                     resolve: {
                         comment: function() {
                             return comment;
@@ -34,13 +42,3 @@ blogApp.directive('commentAdmin', function(Story, User, $http, $state, $modal) {
         }
     };
 });
-
-function DeleteCommentModalCtrl($scope, $modalInstance, comment) {
-    $scope.comment = comment;
-    $scope.ok = function () {
-        $modalInstance.close();
-    };
-    $scope.cancel = function () {
-        $modalInstance.dismiss();
-    };
-}
