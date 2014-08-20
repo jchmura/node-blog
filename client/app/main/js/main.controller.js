@@ -4,6 +4,7 @@ var blogApp = angular.module('blogApp');
 
 blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, socket, Story, User) {
     $scope.stories = [];
+    $scope.news = [];
     $scope.user = User.getUser();
     $scope.alertText = '';
     $scope.imagePath = '/assets/images/';
@@ -27,6 +28,12 @@ blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, 
             User.resetUser();
         });
     };
+
+    $http.get('/api/news').success(function(response) {
+        $scope.news = response.news;
+    }).error(function(err) {
+        console.error(err);
+    });
 
     $scope.$on('$destroy', function () {
         socket.unsyncUpdates('story');
@@ -64,11 +71,13 @@ blogApp.controller('MainCtrl', function ($scope, $http, $sce, $cookies, $state, 
 
     var showLogin = function() {
         $('#login').show();
+        $('.news-list').hide();
     };
 
     var hideLogin = function() {
         dismissAlert();
         $('#login').hide(400);
+        $('.news-list').show();
     };
 
     var showAlert = function(text) {

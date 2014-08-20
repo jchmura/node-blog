@@ -16,6 +16,10 @@
     margin-top: 120px;
 }
 
+.news-list {
+    display: none;
+}
+
 .story {
     margin-top: 20px;
     margin-bottom: 40px;

@@ -22,6 +22,15 @@
                 </button>
             </div>
 
+            <div class="news-list">
+                <h4>Ogłoszenia:</h4>
+                <ul>
+                    <li ng-repeat="aNews in news">
+                        <a ui-sref="detail-news({slug: '{{ aNews.slug }}'})">{{ aNews.title }}</a>
+                    </li>
+                </ul>
+            </div>
+
             <div class="story" ng-repeat="story in stories">
                 <h2>{{ story.date | date : 'fullDate'}} <story-admin story="story"></story-admin></h2>
                 <p class="text-justify" ng-repeat="paragraph in story.content | nlToArray track by $index" ng-bind-html="paragraph | linky | media:story"></p>
