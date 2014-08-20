@@ -21,6 +21,7 @@ function onConnect(socket) {
 	// Insert sockets below
 	require('../api/story/story.socket').client(socket);
 	require('../api/media/media.socket').client(socket);
+	require('../api/news/news.socket').client(socket);
 }
 
 module.exports = function (socketio) {
@@ -57,5 +58,6 @@ module.exports = function (socketio) {
 
     // Register global socketio hooks
     require('../api/story/story.socket').global(socketio);
+    require('../api/news/news.socket').global(socketio);
 
 };

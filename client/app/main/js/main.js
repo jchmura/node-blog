@@ -28,6 +28,11 @@ blogApp.config(function ($stateProvider) {
             url: '/:id',
             templateUrl: 'app/main/detail.html',
             controller: 'DetailCtrl'
+        }).
+        state('detail-news', {
+            url: '/news/:slug',
+            templateUrl: 'app/main/news.html',
+            controller: 'DetailNewsCtrl'
         });
 });
 
